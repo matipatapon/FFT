@@ -1,74 +1,47 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from image import Image
-from fft import FFT
 from converter import Converter
 
-image_filename = "test.bmp"
+IMAGE_FILE_NAME = "test.bmp"
+PLT_ROW_COUNT = 5
+PLT_COL_COUNT = 3
+COLOR = True
+GRAY = False
 
-image = Image(path=image_filename)
+def add_image_to_plot(
+        ndarray : np.ndarray,
+        position : int,
+        title : str,
+        color : bool
+) -> None:
+    plt.subplot(PLT_ROW_COUNT, PLT_COL_COUNT, position)
+    plt.tight_layout()
+    plt.title(title)
+    plt.axis("off")
+    plt.imshow(ndarray)
+    plt.set_cmap("viridis" if color else "gray")
 
-plt.subplot(632)
-plt.tight_layout()
-plt.title("Orginal image")
-plt.axis("off")
-plt.imshow(image.get_all_channels())
 
-plt.set_cmap("gray")
-plt.subplot(634)
-plt.title("Red channel")
-plt.axis("off")
-plt.imshow(image.get_red_channel())
+image = Image(path=IMAGE_FILE_NAME)
 
-plt.subplot(635)
-plt.title("Blue channel")
-plt.axis("off")
-plt.imshow(image.get_blue_channel())
 
-plt.subplot(636)
-plt.title("Green channel")
-plt.axis("off")
-plt.imshow(image.get_green_channel())
+add_image_to_plot(image.get_all_channels(), 2, "Orginal image", COLOR)
+add_image_to_plot(image.get_red_channel(), 4, "Red channel", GRAY)
+add_image_to_plot(image.get_blue_channel(), 5, "Blue channel", GRAY)
+add_image_to_plot(image.get_green_channel(), 6, "Green channel", GRAY)
 
 fft = Converter.convert_image_to_fft(image)
 
-plt.set_cmap("gray")
-plt.subplot(637)
-plt.title("FFT of red channel")
-plt.axis("off")
-plt.imshow(np.log(abs(fft.get_red())))
-
-plt.subplot(638)
-plt.title("FFT of blue channel")
-plt.axis("off")
-plt.imshow(np.log(abs(fft.get_blue())))
-
-plt.subplot(639)
-plt.title("FFT of green channel")
-plt.axis("off")
-plt.imshow(np.log(abs(fft.get_green())))
+add_image_to_plot(np.log(abs(fft.get_red())), 7, "FFT of red channel", GRAY)
+add_image_to_plot(np.log(abs(fft.get_blue())), 8, "FFT of blue channel", GRAY)
+add_image_to_plot(np.log(abs(fft.get_green())), 9, "FFT of green channel", GRAY)
 
 reconstructed_image = Converter.convert_fft_to_image(fft)
 
-plt.subplot(6, 3, 10)
-plt.title("Recreated red channel")
-plt.axis("off")
-plt.imshow(reconstructed_image.get_red_channel())
-
-plt.subplot(6, 3, 11)
-plt.title("Recreated blue channel")
-plt.axis("off")
-plt.imshow(reconstructed_image.get_blue_channel())
-
-plt.subplot(6, 3, 12)
-plt.title("Recreated green channel")
-plt.axis("off")
-plt.imshow(reconstructed_image.get_green_channel())
-
-plt.subplot(6,3,14)
-plt.title("Recreated image")
-plt.axis("off")
-plt.imshow(reconstructed_image.get_all_channels())
-plt.set_cmap("viridis")
+add_image_to_plot(reconstructed_image.get_red_channel(), 10, "Recreated red channel", GRAY)
+add_image_to_plot(reconstructed_image.get_blue_channel(), 11, "Recreated blue channel", GRAY)
+add_image_to_plot(reconstructed_image.get_green_channel(), 12, "Recreated green channel", GRAY)
+add_image_to_plot(reconstructed_image.get_all_channels(), 14, "Recreated image", COLOR)
 
 plt.show()
