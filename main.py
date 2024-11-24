@@ -1,55 +1,97 @@
 import numpy as np
 import matplotlib.pyplot as plt
-image_filename = "image.png"
+from typing import Tuple, List
 
-def calculate_2dft(input):
-    ft = np.fft.fft2(input)
+image_filename = "test.bmp"
 
-    # zmienia kolejność aby najmniejsze frekwencje były najbliżej centrum
-    ft = np.fft.fftshift(ft)
-    return ft
+class ImageToFFTConverter:
+    def _to_fft(self, channel : np.ndarray) -> np.ndarray:
+        return np.fft.fftshift(np.fft.fft2(channel))
 
-def calculate_2dift(input):
-    return np.fft.ifft2(input)
+    def __init__(self, image : np.ndarray) -> None:
+        self.red_fft = self._to_fft(image[:, :, 0])
+        self.blue_fft = self._to_fft(image[:, :, 1])
+        self.green_fft = self._to_fft(image[:, :, 2])
 
-def split_image_into_rgb(image):
-    red = image[:, :, 0]
-    green = image[:, :, 1]
-    blue = image[:, :, 2]
-    return red, green, blue
-# Read and process image
+class FFTToImageConverter:
+    def _to_channel(self, fft : np.ndarray) -> np.ndarray:
+        return np.fft.ifft2(fft)
+
+    def _channels_to_image(self) -> np.ndarray:
+        image_y_size = len(self.red_channel)
+        image_x_size = len(self.red_channel[0])
+        image_channel_count = 3
+        image = np.ndarray(
+            (image_y_size,
+             image_x_size,
+             image_channel_count),
+             np.uint8)
+        
+        image[:, :, 0] = abs(self.red_channel)
+        image[:, :, 1] = abs(self.blue_channel)
+        image[:, :, 2] = abs(self.green_channel)
+        return image
+
+    def __init__(
+            self,
+            red : np.ndarray,
+            blue : np.ndarray,
+            green : np.ndarray
+    ) -> None:
+        self.red_channel = self._to_channel(red)
+        self.blue_channel = self._to_channel(blue)
+        self.green_channel = self._to_channel(green)
+        self.image = self._channels_to_image()
+
 image = plt.imread(image_filename)
-red, green, blue = split_image_into_rgb(image)
 
-ftr = calculate_2dft(red)
-ftg = calculate_2dft(green)
-ftb = calculate_2dft(blue)
+plt.subplot(532)
+plt.tight_layout()
+plt.title("Orginal image")
+plt.axis("off")
+plt.imshow(image)
+img_to_fft_conv = ImageToFFTConverter(image)
 
 plt.set_cmap("gray")
+plt.subplot(534)
+plt.title("FFT of red channel")
 plt.axis("off")
-plt.subplot(331)
-plt.imshow(red)
-plt.subplot(332)
-plt.imshow(green)
-plt.subplot(333)
-plt.imshow(blue)
-plt.subplot(334)
-plt.imshow(np.log(abs(ftr)))
-plt.subplot(335)
-plt.imshow(np.log(abs(ftg)))
-plt.subplot(336)
-plt.imshow(np.log(abs(ftb)))
-plt.subplot(337)
-plt.imshow(abs(calculate_2dift(ftr)))
-plt.subplot(338)
-plt.imshow(abs(calculate_2dift(ftg)))
-plt.subplot(339)
-plt.imshow(abs(calculate_2dift(ftb)))
+plt.imshow(np.log(abs(img_to_fft_conv.red_fft)))
 
-#https://thepythoncodingbook.com/2021/08/30/2d-fourier-transform-in-python-and-fourier-synthesis-of-images/
-#https://www.youtube.com/watch?v=KGiV_2i713I
-
-#abs - zmiana z complex na zwykłe
-#log - aby lepiej było widać :)
+plt.subplot(535)
+plt.title("FFT of blue channel")
 plt.axis("off")
+plt.imshow(np.log(abs(img_to_fft_conv.blue_fft)))
+
+plt.subplot(536)
+plt.title("FFT of green channel")
+plt.axis("off")
+plt.imshow(np.log(abs(img_to_fft_conv.green_fft)))
+
+fft_to_img_conv = FFTToImageConverter(
+    img_to_fft_conv.red_fft,
+    img_to_fft_conv.blue_fft,
+    img_to_fft_conv.green_fft)
+
+plt.subplot(537)
+plt.title("Red channel from FFT")
+plt.axis("off")
+plt.imshow(abs(fft_to_img_conv.red_channel))
+
+plt.subplot(538)
+plt.title("Blue channel from FFT")
+plt.axis("off")
+plt.imshow(abs(fft_to_img_conv.blue_channel))
+
+plt.subplot(539)
+plt.title("Green channel from FFT")
+plt.axis("off")
+plt.imshow(abs(fft_to_img_conv.green_channel))
+
+plt.subplot(5,3,11)
+plt.title("Recreated image")
+plt.axis("off")
+plt.imshow(abs(fft_to_img_conv.image))
+plt.set_cmap("viridis")
+
 plt.show()
