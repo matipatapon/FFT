@@ -30,9 +30,9 @@ class Converter:
         threshold_fft = fft * mask #mask the values to be truncated
         return threshold_fft #return fft
     
-    def apply_threshold_to_fft(fft : FFT) -> FFT: #For each channel's fft run the thresholding method and return FFT object with the results
+    def apply_threshold_to_fft(fft : FFT, threshold : float) -> FFT: #For each channel's fft run the thresholding method and return FFT object with the results
         return FFT(
-            Converter._apply_threshold_to_fft_single_channel(fft.get_red),
-            Converter._apply_threshold_to_fft_single_channel(fft.get_green),
-            Converter._apply_threshold_to_fft_single_channel(fft.get_blue)
+            Converter._apply_threshold_to_fft_single_channel(fft.get_red, threshold),
+            Converter._apply_threshold_to_fft_single_channel(fft.get_green, threshold),
+            Converter._apply_threshold_to_fft_single_channel(fft.get_blue, threshold)
         )
