@@ -37,6 +37,8 @@ add_image_to_plot(np.log(abs(fft.get_red())), 7, "FFT of red channel", GRAY)
 add_image_to_plot(np.log(abs(fft.get_blue())), 8, "FFT of blue channel", GRAY)
 add_image_to_plot(np.log(abs(fft.get_green())), 9, "FFT of green channel", GRAY)
 
+fft = Converter.apply_threshold_to_fft(fft, 0.1) #Apply threshold. Threshold percentage will come from user in the future. Threshold manually set to 10% for now.
+
 reconstructed_image = Converter.convert_fft_to_image(fft)
 
 add_image_to_plot(reconstructed_image.get_red_channel(), 10, "Recreated red channel", GRAY)
