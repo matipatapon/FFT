@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from image import Image
 from converter import Converter
-import FFT
+from fft import FFT
 
 IMAGE_FILE_NAME = "test.bmp"
 PLT_ROW_COUNT = 5
