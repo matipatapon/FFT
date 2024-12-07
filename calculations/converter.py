@@ -1,5 +1,5 @@
-from image import Image
-from fft import FFT
+from calculations.image import Image
+from calculations.fft import FFT
 import numpy as np
 
 class Converter:
