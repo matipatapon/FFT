@@ -18,7 +18,7 @@ class DropWindow(QWidget):
         self.dropLabel = DropLabel()
         self.dropLabel.fileSelectedSignal.connect(self.selectedFileChanged)
 
-        self.fileButton = FileButton();
+        self.fileButton = FileButton()
         self.fileButton.fileSelectedSignal.connect(self.selectedFileChanged)
 
         self.gridLayout = self.createGrid()
@@ -59,7 +59,7 @@ class DropWindow(QWidget):
         gridLayout.addWidget(self.dropLabel, 0, 3, 2,2)
         gridLayout.addWidget(self.fileButton, 0, 5, 2 ,1)
 
-        return gridLayout;
+        return gridLayout
 
     def selectedFileChanged(self, filePath: str) -> None:
         if filePath:
@@ -93,6 +93,7 @@ class DropWindow(QWidget):
             return
 
         cmap = "viridis" if color else "gray"
+        self.plotWidgets[position].clear()
         self.plotWidgets[position].changeTitle(title)
         self.plotWidgets[position].displayDataAsImage(ndarray, cmap)
         self.plotWidgets[position].updateDrawing()

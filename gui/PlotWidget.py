@@ -40,6 +40,9 @@ class PlotWidget(QWidget):
     def updateDrawing(self) -> None:
         self.sc.draw()
 
+    def clear(self) -> None:
+        self.sc.axes.clear()
+        self.sc.axes.set_axis_off()
 
 class PlotCanvas(FigureCanvasQTAgg):
     def __init__(self, parent=None, width=5, height=5, dpi=100):

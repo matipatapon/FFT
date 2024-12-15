@@ -11,9 +11,8 @@ def main():
     controller = Controller(gui)
 
     gui.fileChangedSignal.connect(controller.changeFile)
-    gui.thresholdChangedSignal.connect(controller.changeThreshold)
+    gui.thresholdChangedSignal.connect(controller.refreshFFT)
     app.exec()
-
 
 if __name__ == "__main__": 
     main()
