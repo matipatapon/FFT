@@ -58,8 +58,11 @@ class ThresholdSlider(QWidget):
 
         self.slider.setStyleSheet(self.getStyling())
 
+        shouldEmitDuringDragging = False
+        self.slider.setTracking(shouldEmitDuringDragging)
+
         self.slider.valueChanged.connect(self.onValueChange)
-        self.slider.sliderReleased.connect(self.onSliderRelease)
+        self.slider.sliderMoved.connect(self.updateShownPercentage)
 
         self.valueInfo = QLabel()
         self.valueInfo.setFixedWidth(40)
@@ -72,12 +75,13 @@ class ThresholdSlider(QWidget):
 
         self.setLayout(layout)
 
-    def onValueChange(self, value: int) -> None:
+    def updateShownPercentage(self, value: int) -> None:
         self.sliderValue = value
         self.valueInfo.setText(f"{value}%")
 
-    def onSliderRelease(self) -> None:
-        self.sliderValueChanged.emit((self.sliderValue)/100)
+    def onValueChange(self, value: int) -> None:
+        self.updateShownPercentage(value)
+        self.sliderValueChanged.emit((value)/100)
 
     def getStyling(self) -> str:
         return '''
