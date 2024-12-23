@@ -19,3 +19,9 @@ class FFT:
 
     def get_green(self) -> np.ndarray:
         return self._green
+    
+    def get_width(self) -> int:
+        return len(self._green[0])
+    
+    def get_height(self) -> int:
+        return len(self._green)
