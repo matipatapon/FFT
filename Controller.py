@@ -5,6 +5,7 @@ from calculations.fft import FFT
 from settings import *
 from gui.Gui import Gui
 from typing import Optional
+from calculations.file import fft_to_file, file_to_fft
 
 class Controller:
     def __init__(self, gui: Gui):
