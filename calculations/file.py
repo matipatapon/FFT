@@ -62,4 +62,7 @@ def file_to_fft(path: str) -> FFT:
                 imag = _int16_to_float64(np.frombuffer(f.read1(2), np.int16, 1)[0])
                 channel[x][y] = np.complex128(real, imag)
                 how_many_zeroes_ahead = np.frombuffer(f.read1(1), np.uint8, 1)[0]
-    return FFT(red, blue, green)
+
+    BROKEN :(
+
+    return FFT(red, green, blue)
