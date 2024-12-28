@@ -15,9 +15,6 @@ class Controller:
     def refreshFFT(self, threshold: float):
         if self._image:
             fft = Converter.convert_image_to_fft(self._image, threshold)
-            #tymczasowe do testowania
-            fft_to_file("test.fft", fft)
-            fft = file_to_fft("test.fft")
 
             self._gui.add_image_to_plot(np.log(abs(fft.get_red())), 3, "FFT of red channel", GRAY)
             self._gui.add_image_to_plot(np.log(abs(fft.get_blue())), 4, "FFT of blue channel", GRAY)
