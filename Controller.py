@@ -5,7 +5,7 @@ from calculations.fft import FFT
 from settings import *
 from gui.Gui import Gui
 from typing import Optional
-from calculations.file import
+from calculations.file import file_to_fft, fft_to_file
 
 class Controller:
     def __init__(self, gui: Gui):
@@ -15,10 +15,12 @@ class Controller:
     def refreshFFT(self, threshold: float):
         if self._image:
             fft = FFT.from_image(self._image, threshold)
+            fft_to_file("test.fft", fft)
+            fft = file_to_fft("test.fft")
 
-            self._gui.add_image_to_plot(np.log(abs(fft.get_red())), 3, "FFT of red channel", GRAY)
-            self._gui.add_image_to_plot(np.log(abs(fft.get_blue())), 4, "FFT of blue channel", GRAY)
-            self._gui.add_image_to_plot(np.log(abs(fft.get_green())), 5, "FFT of green channel", GRAY)
+            self._gui.add_image_to_plot(np.log(abs(fft.get_complex_red())), 3, "FFT of red channel", GRAY)
+            self._gui.add_image_to_plot(np.log(abs(fft.get_complex_blue())), 4, "FFT of blue channel", GRAY)
+            self._gui.add_image_to_plot(np.log(abs(fft.get_complex_green())), 5, "FFT of green channel", GRAY)
 
             reconstructed_image: Image = Converter.convert_fft_to_image(fft)
             self._gui.setRecreatedImage(reconstructed_image.get_all_channels(), "Recreated image")

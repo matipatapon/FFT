@@ -12,10 +12,31 @@ class FFT:
     ):
         self._red_real = red_real
         self._red_imag = red_imag
+        self._red_complex =  FFT._convert_to_complex_array(self._red_real, self._red_imag)
         self._green_real = green_real
         self._green_imag = green_imag
+        self._green_complex = FFT._convert_to_complex_array(self._green_real, self._green_imag)
         self._blue_real = blue_real
         self._blue_imag = blue_imag
+        self._blue_complex = FFT._convert_to_complex_array(self._blue_real, self._blue_imag)
+
+    def _convert_to_complex_array(real_array: np.ndarray, imag_array: np.ndarray):
+        width = len(real_array[0])
+        height = len(real_array)
+        complex_array = np.ndarray([height, width], np.complex128)
+        for x in range(0, height):
+            for y in range(0, width):
+                complex_array[x][y] = np.complex128(
+                    FFT._int16_to_float64(
+                        real_array[x][y]),
+                    FFT._int16_to_float64(
+                        imag_array[x][y]))
+        return complex_array
+
+    def _int16_to_float64(int16: np.int16):
+        int32 = np.int32(int16)
+        int32 <<= 16
+        return np.float64(int32)
 
     def from_image(img: Image, threshold: float):
         red_channel = FFT._apply_threshold_to_fft_single_channel(
@@ -53,8 +74,7 @@ class FFT:
             green_int16_real,
             green_int16_imag,
             blue_int16_real,
-            blue_int16_imag
-        )
+            blue_int16_imag)
 
     def _apply_threshold_to_fft_single_channel(fft : np.ndarray, threshold : float) -> np.ndarray: #pass data after .fft2, threshold is percentage written in decimal (ie. 10% = 0,1)
         fft_sort = np.sort(np.abs(fft.reshape(-1))) #get sorted vector with just the values for determining the numeric value of threshold
@@ -77,73 +97,35 @@ class FFT:
         roundedFloat64 >>= 16
         return np.int16(roundedFloat64)
 
-    def _int16_to_float64(int16: np.int16):
-        int32 = np.int32(int16)
-        int32 <<= 16
-        return np.float64(int32)
-
-    def get_complex_red(self) -> np.ndarray:
-        pass
-
-    def get_complex_green(self) -> np.ndarray:
-        pass
-
-    def get_complex_blue(self) -> np.ndarray:
-        pass
+    def get_width(self) -> int:
+        return len(self._red_real[0])
+    
+    def get_height(self) -> int:
+        return len(self._red_real)
 
     def get_int_red_real(self) -> np.ndarray:
-        pass
+        return self._red_real
 
     def get_int_red_imag(self) -> np.ndarray:
-        pass
+        return self._red_imag
 
     def get_int_blue_real(self) -> np.ndarray:
-        pass
+        return self._blue_real
 
     def get_int_blue_imag(self) -> np.ndarray:
-        pass
+        return self._blue_imag
 
     def get_int_green_real(self) -> np.ndarray:
-        pass
+        return self._green_real
 
     def get_int_green_imag(self) -> np.ndarray:
-        pass
+        return self._green_imag
 
-    def get_red(self) -> np.ndarray:
-        width = len(self._red_real[0])
-        height = len(self._red_real)
-        red_channel = np.ndarray([height, width], np.complex128)
-        for x in range(0, height):
-            for y in range(0, width):
-                red_channel[x][y] = np.complex128(
-                    FFT._int16_to_float64(
-                        self._red_real[x][y]),
-                    FFT._int16_to_float64(
-                        self._red_imag[x][y]))
-        return red_channel
+    def get_complex_red(self) -> np.ndarray:
+        return self._red_complex
 
-    def get_blue(self) -> np.ndarray:
-        width = len(self._blue_real[0])
-        height = len(self._blue_real)
-        blue_channel = np.ndarray([height, width], np.complex128)
-        for x in range(0, height):
-            for y in range(0, width):
-                blue_channel[x][y] = np.complex128(
-                    FFT._int16_to_float64(
-                        self._blue_real[x][y]),
-                    FFT._int16_to_float64(
-                        self._blue_imag[x][y]))
-        return blue_channel
+    def get_complex_green(self) -> np.ndarray:
+        return self._green_complex
 
-    def get_green(self) -> np.ndarray:
-        width = len(self._green_real[0])
-        height = len(self._green_real)
-        green_channel = np.ndarray([height, width], np.complex128)
-        for x in range(0, height):
-            for y in range(0, width):
-                green_channel[x][y] = np.complex128(
-                    FFT._int16_to_float64(
-                        self._green_real[x][y]),
-                    FFT._int16_to_float64(
-                        self._green_imag[x][y]))
-        return green_channel
+    def get_complex_blue(self) -> np.ndarray:
+        return self._blue_complex

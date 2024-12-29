@@ -5,9 +5,9 @@ import numpy as np
 class Converter:
     def convert_fft_to_image(fft : FFT) -> Image:
         return Image(
-            red=Converter._fft_to_channel(fft.get_red()),
-            blue=Converter._fft_to_channel(fft.get_blue()),
-            green=Converter._fft_to_channel(fft.get_green())
+            red=Converter._fft_to_channel(fft.get_complex_red()),
+            blue=Converter._fft_to_channel(fft.get_complex_blue()),
+            green=Converter._fft_to_channel(fft.get_complex_green())
         )
 
     def _fft_to_channel(fft : np.ndarray) -> np.ndarray:
