@@ -8,22 +8,14 @@ def fft_to_file(path: str, fft: FFT) -> None:
     f.write(width.tobytes())
     f.write(height.tobytes())
 
-    red_real = fft.get_int_red_real()
-    red_imag = fft.get_int_red_imag()
-    green_real = fft.get_int_green_real()
-    green_imag = fft.get_int_green_imag()
-    blue_real = fft.get_int_blue_real()
-    blue_imag = fft.get_int_blue_imag()
+    red = fft.get_complex_red()
+    green = fft.get_complex_green()
+    blue = fft.get_complex_blue()
     how_many_zeroes_ahead = 0
 
     for x in range(0, height):
         for y in range(0, width):
-            for channel in (red_real[x][y],
-                            red_imag[x][y],
-                            green_real[x][y],
-                            green_imag[x][y],
-                            blue_real[x][y],
-                            blue_imag[x][y]):
+            for channel in (red[x][y], green[x][y], blue[x][y]):
                 if channel == 0 and how_many_zeroes_ahead != np.iinfo('uint8').max and (x != height -1 and y != width -1):
                     how_many_zeroes_ahead+=1
                     continue
@@ -36,26 +28,23 @@ def file_to_fft(path: str) -> FFT:
 
     width = np.frombuffer(f.read1(2), np.uint16, 1)[0]
     height = np.frombuffer(f.read1(2), np.uint16, 1)[0]
-    red_real = np.ndarray(shape=(height, width), dtype=np.int16)
-    red_imag = np.ndarray(shape=(height, width), dtype=np.int16)
-    green_real = np.ndarray(shape=(height, width), dtype=np.int16)
-    green_imag = np.ndarray(shape=(height, width), dtype=np.int16)
-    blue_real = np.ndarray(shape=(height, width), dtype=np.int16)
-    blue_imag = np.ndarray(shape=(height, width), dtype=np.int16)
+    red = np.ndarray(shape=(height, width), dtype=np.complex128)
+    green = np.ndarray(shape=(height, width), dtype=np.complex128)
+    blue = np.ndarray(shape=(height, width), dtype=np.complex128)
     how_many_zeroes_ahead = 0
     how_many_zeroes_ahead_readed = False
 
     for x in range(0, height):
         for y in range(0, width):
-            for channel in (red_real, red_imag, green_real, green_imag, blue_real, blue_imag):
+            for channel in (red, green, blue):
                 if not how_many_zeroes_ahead_readed:
                     how_many_zeroes_ahead = np.frombuffer(f.read1(1), np.uint8, 1)[0]
                     how_many_zeroes_ahead_readed = True
                 if how_many_zeroes_ahead != 0:
-                    channel[x][y] = np.int16(0)
+                    channel[x][y] = np.complex128(0, 0)
                     how_many_zeroes_ahead-=1
                     continue
-                channel[x][y] = np.frombuffer(f.read1(2), np.int16, 1)[0]
+                channel[x][y] = np.frombuffer(f.read1(16), np.complex128, 1)[0]
                 how_many_zeroes_ahead_readed = False
 
-    return FFT(red_real, red_imag, green_real, green_imag, blue_real, blue_imag)
+    return FFT(red, green, blue)
