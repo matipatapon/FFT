@@ -4,23 +4,22 @@ from PySide6.QtWidgets import QSizePolicy, QWidget, QLabel, QVBoxLayout, QPushBu
 from PySide6.QtCore import Qt, Signal, QSize
 import settings
 
-class FileButton(QWidget):
-    fileSelectedSignal = Signal(str)
-    fftFileSelectedSignal = Signal(str)
+class SaveButton(QWidget):
+    fileSavedSignal = Signal(str)
     def __init__(self):
         super().__init__()
 
         button_label = QLabel(settings.DIRECTORY_ICON)
-        button_label.setText("\n CHOOSE FILE \n")
+        button_label.setText("\n SAVE FILE \n")
 
         button_pixmap = QPixmap(settings.DIRECTORY_ICON)
         button_icon = QIcon(button_pixmap)
         button = QPushButton()
         button.setIcon(button_icon)
-        button.setText("Choose file")
+        button.setText("Save file")
         icon_size = QSize(round(button_pixmap.width()/16), round(button_pixmap.height()/16))
         button.setIconSize(icon_size)
-        button.clicked.connect(self.selectFile)
+        button.clicked.connect(self.selectSavePath)
         button.setStyleSheet("""
             QPushButton {{
                 background:{BG};
@@ -39,16 +38,11 @@ class FileButton(QWidget):
         self.setLayout(layout)
 
 
-    def selectFile(self) -> None:
-        self.filePath = QFileDialog.getOpenFileName(
+    def selectSavePath(self) -> None:
+        self.filePath = QFileDialog.getSaveFileName(
             parent = QWidget(),
-            caption = "Select file",
-            dir = os.getcwd(),
-            filter = "Image file (*.jpg *.bmp *.fft)",
-            selectedFilter = "Image file (*.jpg *.bmp *.fft)"
+            caption = "Save file",
+            dir = os.getcwd() + "/compressed_image.fft"
         )
         if self.filePath:
-            if self.filePath[0][-3:] == "fft":
-                self.fftFileSelectedSignal.emit(self.filePath[0])
-            else:
-                self.fileSelectedSignal.emit(self.filePath[0])
+            self.fileSavedSignal.emit(self.filePath[0])

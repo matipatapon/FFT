@@ -1,45 +1,7 @@
 from PySide6.QtGui import QCursor
-from PySide6.QtWidgets import QFormLayout, QSizePolicy, QSlider, QWidget, QHBoxLayout, QLabel
+from PySide6.QtWidgets import QFormLayout, QSlider, QWidget, QLabel
 from PySide6.QtCore import Qt, Signal
-import numpy as np
 import settings
-
-from gui.PlotWidget import PlotWidget
-
-
-class ImageWindow(QWidget):
-    def __init__(self):
-        super().__init__()
-        self.show()
-
-        layout = QHBoxLayout()
-
-        self.imageLabel = PlotWidget()
-        self.imageLabel.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
-
-        self.slider = ThresholdSlider()
-
-        layout.addWidget(self.imageLabel)
-        layout.addWidget(self.slider)
-
-        holderWidget = QWidget()
-        holderWidget.setStyleSheet(f"background:{settings.BACKGROUND_WIDGET}; border-radius: 10px");
-        holderWidget.setLayout(layout)
-
-        holderLayout = QHBoxLayout()
-        holderLayout.addWidget(holderWidget)
-
-        self.setLayout(holderLayout)
-
-    def setImage(
-        self,
-        ndarray : np.ndarray,
-        title: str
-        ) -> None:
-        self.imageLabel.changeTitle(title)
-        self.imageLabel.displayDataAsImage(ndarray, "viridis")
-        self.imageLabel.updateDrawing()
-
 
 class ThresholdSlider(QWidget):
     sliderValueChanged = Signal(float)
@@ -55,6 +17,7 @@ class ThresholdSlider(QWidget):
         self.slider.setSingleStep(1)
         self.slider.setTickPosition(QSlider.TickPosition.TicksAbove)
         self.slider.setCursor(QCursor(Qt.PointingHandCursor))
+        self.slider.setFixedWidth(125)
 
         self.slider.setStyleSheet(self.getStyling())
 
@@ -65,10 +28,10 @@ class ThresholdSlider(QWidget):
         self.slider.sliderMoved.connect(self.updateShownPercentage)
 
         self.valueInfo = QLabel()
-        self.valueInfo.setFixedWidth(40)
+        self.valueInfo.setFixedWidth(125)
         self.valueInfo.setStyleSheet("font-weight: bold;")
         self.valueInfo.setAlignment(Qt.AlignCenter)
-        self.valueInfo.setText(f"{self.sliderValue}%")
+        self.valueInfo.setText(f"Threshold: {self.sliderValue}%")
 
         layout.addRow(self.slider)
         layout.addRow(self.valueInfo)
@@ -77,7 +40,7 @@ class ThresholdSlider(QWidget):
 
     def updateShownPercentage(self, value: int) -> None:
         self.sliderValue = value
-        self.valueInfo.setText(f"{value}%")
+        self.valueInfo.setText(f"Threshold: {value}%")
 
     def onValueChange(self, value: int) -> None:
         self.updateShownPercentage(value)
