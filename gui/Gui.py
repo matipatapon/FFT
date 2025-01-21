@@ -19,7 +19,7 @@ class Gui(QMainWindow):
 
         self.menu = MenuTabs()
         self.menu.setStyleSheet("background-color: #272c36")
-        self.setStyleSheet("background-color: #272c36")
+        self.setStyleSheet("background-color: #272c36; color: white;")
 
         self.primaryWindow = PrimaryWindow()
         self.primaryWindow.fileDroppedSignal.connect(self.pathChanged)

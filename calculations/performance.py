@@ -40,13 +40,9 @@ class Performance:
     def get_compressed_size(self) -> int:
         return self.encoded_size
 
-    # TODO Still needs checking
     def get_mean_squared_error(self) -> np.floating:
-        orig_img: Image = Converter.convert_fft_to_image(self.image_fft)
-        compressed_img: Image = Converter.convert_fft_to_image(self.compressed_image_fft)
+        orig_img: np.ndarray = (Converter.convert_fft_to_image(self.image_fft)).get_all_channels()
+        compressed_img: np.ndarray = (Converter.convert_fft_to_image(self.compressed_image_fft)).get_all_channels()
 
-        orig = np.clip(orig_img.get_all_channels(), 0, 1)
-        comp = np.clip(compressed_img.get_all_channels(), 0, 1)
-
-        mse = np.mean((orig - comp) ** 2)
+        mse = np.mean((orig_img - compressed_img)**2)
         return round(mse,4)
