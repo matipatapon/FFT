@@ -10,7 +10,8 @@ class Image:
             blue : Optional[np.ndarray] = None,
             green : Optional[np.ndarray] = None):
         if path is not None:
-            self._image = plt.imread(path)
+            self._image = plt.imread(path)[:, :, :3]
+            self._path = path
         elif red is not None and blue is not None and green is not None:
             image_y_size = len(red)
             image_x_size = len(red[0])
@@ -39,3 +40,7 @@ class Image:
     def get_all_channels(self) -> np.ndarray:
         return self._image
 
+    def get_path(self) -> str:
+        if(self._path is None):
+            raise ValueError("Path is not set")
+        return self._path

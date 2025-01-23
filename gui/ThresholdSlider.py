@@ -1,6 +1,7 @@
 from PySide6.QtGui import QCursor
 from PySide6.QtWidgets import QFormLayout, QSlider, QWidget, QLabel
 from PySide6.QtCore import Qt, Signal
+from calculations.constants import DEFAULT_THRESHOLD
 import settings
 
 class ThresholdSlider(QWidget):
@@ -9,7 +10,7 @@ class ThresholdSlider(QWidget):
         super().__init__()
 
         layout = QFormLayout()
-        self.sliderValue: int = 10
+        self.sliderValue: int = DEFAULT_THRESHOLD
 
         self.slider = QSlider(Qt.Orientation.Vertical, self)
         self.slider.setRange(1, 100)
