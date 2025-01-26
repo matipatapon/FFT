@@ -7,15 +7,64 @@
         }
     </style>
 </header>
-<div style="display:flex; justify-content:left; text-align:left;">
-    <pre style="white-space: pre-wrap;">
-W erze cyfryzacji XXI wieku coraz większym problemem staje się ilość informacji generowanych przez ludzi na całym świecie. Coraz szybciej miniaturyzacja elektroniki zbliża się do granicy rozmiaru podzespołów, a nośniki pamięci nie są wyjątkiem. Coraz większa ilość danych wymagających przechowania oraz niemożność dalszej miniaturyzacji elektroniki szybko doprowadzą do zastoju nie tylko technologii komputerowej, ale również wielu innych dziedzin, które korzystają z komputerów jako narzędzi. Oprócz dalszej miniaturyzacji układów problem ten można rozwiązać między innymi poprzez:
-1.	Zwiększenie ilości układów w nośnikach pamięci
-2.	Zwiększenie skoncentrowania zapisanych danych (kompresja)
-Każdy z tych sposobów mierzy się z innymi problemami i posiada inne zalety. Zwiększenie ilości układów w nośnikach pamięci jest kosztowne w surowce naturalne oraz gotowy nośnik zajmuje dużą fizyczną powierzchnię. W związku ze zwiększonym kosztem produkcji, koszty nabytku takiego nośnika również wzrastają. Jest to jednak relatywnie szybki proces nie wymagający dużych zmian w architekturze samego nośnika.
-Zwiększenie skoncentrowania zapisanych danych nie wymaga żadnych zmian w architekturze nośnika pamięci, ani nie wnosi dodatkowych kosztów produkcyjnych. Jest to jednak proces, który wymaga sporo czasu w celu wymyślenia algorytmów kompresji dla różnych typów danych.
-Jednym z typów danych, które najtrudniej efektywnie poddać kompresji są obrazy cyfrowe. Istnieją dwa rodzaje kompresji takich danych: kompresja stratna i bezstratna. Kompresja bezstratna skupia się w pełni na jak najbardziej skoncentrowanej formie zapisu danych bez ingerowania w ich ilość. Natomiast kompresja stratna skupia się na usunięciu danych, tak aby obraz dalej pozostawał rozpoznawalny. Najczęściej algorytmy kompresji wykorzystują jednocześnie kompresję stratną jak i bezstratną, aby najpierw zredukować ilość danych, a następnie efektywnie rozmieścić pozostałe dane w pamięci. Przy stosowaniu metod kompresji stratnych kluczowym elementem jest uzyskanie odpowiedniego balansu między ilością danych, które zostaną usunięte oraz jakością wynikowego obrazu. Kompresja stratna powinna redukować ilość danych tak, aby spadek jakości obrazu był możliwie jak najmniejszy. Wiele algorytmów kompresji stratnej posiada z tego powodu poziom kompresji, który określa ile danych ma zostać usuniętych. Ponieważ różne algorytmy kompresji, różnie wyliczają, które dane można odrzucić, wybór odpowiedniego algorytmu kompresji dla danego obrazu jest bardzo istotny.
-    </pre>
+<div style="display:flex; justify-content:center; text-align:left; margin: 20px 50px; padding: 20px 0px;">
+    <h1>Application</h1>
+    <p>
+        Application by applying the Fast Fourier Transform, removes a certain percentage of data from the image, and
+        then saves the resulting image in a custom created format. Users can select the percentage to discard and view
+        the result in different forms.
+    </p>
+    <p>
+        There are four tabs:
+    <ul>
+        <li>
+            Image: Screen allows the user to load the selected image into the application and select the level of the
+            threshold value used for compression.
+        </li>
+        <li>
+            Plots: Screen shows the original, compressed and plotted fft of the image in all three color channels.
+        </li>
+        <li>
+            Statistics: Screen shows various measuring components to evaluate the image compression such as: original
+            and compressed file sizes, compression time, compresstion ratio, mean squared error
+        </li>
+        <li>
+            Information: Screen presents information about the application.
+        </li>
+    </ul>
+    </p>
+
+    <h1>How it works</h1>
+    <ol>
+        <li>
+            We load a color image. Then we apply the two-dimensional Fourier transform for each color channel
+            of the image.
+        </li>
+        <li>
+            Values are sorted and only a fraction of frequncies determined by threshold are kept, the rest of the
+            data is set to 0.
+        </li>
+        <li>
+            The result is then applied to inverse fft algorithm and shown to the screen.
+            Resulted image can be downloaded in our own format.
+        </li>
+    </ol>
+
+    <h1>What is FFT</h1>
+    <h3>FFT</h3>
+    <p>
+        A fast Fourier transform (FFT) is an algorithm that computes the Discrete Fourier Transform (DFT) of a sequence,
+        or its inverse. A Fourier transform converts a signal from its original domain to a representation in the
+        frequency domain and vice versa. Fourier Transform decomposes an image into its frequency components.
+    </p>
+
+    <h3>2d FFT</h3>
+    <p>
+        The two-dimensional Fourier transform of a matrix of data is achieved by first applying the one-dimensional
+        Fourier transform to every row of the matrix and then applying the one-dimensional Fourier transform to every
+        column of the intermediate matrix. The two-dimensional FFT is effective for image compression, because many of
+        the Fourier coefficients can be discarded without losing significant image quality.
+    </p>
 </div>
 
 </html>
