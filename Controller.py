@@ -43,7 +43,8 @@ class Controller:
 
     def changeFFTFile(self, path: str) -> None:
         fft = file_to_fft(path)
-        self._image = Converter.convert_fft_to_image(fft)
+        self._image: Image = Converter.convert_fft_to_image(fft)
+        self._image.set_path(path)
 
         self._gui.add_image_to_plot(self._image.get_red_channel(), 0, "Red channel", GRAY)
         self._gui.add_image_to_plot(self._image.get_blue_channel(), 1, "Blue channel", GRAY)

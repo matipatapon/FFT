@@ -31,7 +31,6 @@ class DropLabel(QLabel):
         e = event
         img_path = e.mimeData().urls()[0].toLocalFile()
         if img_path:
-            print(img_path)
             if img_path[-3:] == "fft":
                 self.fftFileSelectedSignal.emit(img_path)
             else:

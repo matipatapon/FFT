@@ -44,3 +44,7 @@ class Image:
         if(self._path is None):
             raise ValueError("Path is not set")
         return self._path
+
+    def set_path(self, path) -> None:
+        if path:
+            self._path = path
