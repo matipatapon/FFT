@@ -6,6 +6,7 @@ import settings
 
 class DropLabel(QLabel):
     fileSelectedSignal = Signal(str)
+    fftFileSelectedSignal = Signal(str)
 
     def __init__(self):
         super().__init__()
@@ -30,7 +31,12 @@ class DropLabel(QLabel):
         e = event
         img_path = e.mimeData().urls()[0].toLocalFile()
         if img_path:
-            self.fileSelectedSignal.emit(img_path)
+            print(img_path)
+            if img_path[-3:] == "fft":
+                self.fftFileSelectedSignal.emit(img_path)
+            else:
+                self.fileSelectedSignal.emit(img_path)
+
 
     def onResize(self, width: int, height: int) -> None:
         if self._pixmap:
@@ -54,6 +60,8 @@ class DropLabel(QLabel):
     def calculatePixmapSize(self, pixmap: QPixmap, desired_width) -> QSize:
         original_width = pixmap.width()
         original_height = pixmap.height()
+        if original_width == 0:
+            return QSize(256,256)
         aspect_ratio = original_height / original_width
         new_height = int(desired_width * aspect_ratio)
         size=QSize(desired_width, new_height)

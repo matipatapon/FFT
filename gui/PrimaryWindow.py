@@ -21,6 +21,7 @@ class PrimaryWindow(QWidget):
 
         self.dropLabel = DropLabel()
         self.dropLabel.fileSelectedSignal.connect(self.selectedFileChanged)
+        self.dropLabel.fftFileSelectedSignal.connect(self.selectedFFTChanged)
 
         self.fftImage: PlotWidget = PlotWidget()
         self.fftImage.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
