@@ -1,0 +1,70 @@
+<html>
+<header>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</header>
+<div style="display:flex; justify-content:center; text-align:left; margin: 20px 50px; padding: 20px 0px;">
+    <h1>Application</h1>
+    <p>
+        Application by applying the Fast Fourier Transform, removes a certain percentage of data from the image, and
+        then saves the resulting image in a custom created format. Users can select the percentage to discard and view
+        the result in different forms.
+    </p>
+    <p>
+        There are four tabs:
+    <ul>
+        <li>
+            Image: Screen allows the user to load the selected image into the application and select the level of the
+            threshold value used for compression.
+        </li>
+        <li>
+            Plots: Screen shows the original, compressed and plotted fft of the image in all three color channels.
+        </li>
+        <li>
+            Statistics: Screen shows various measuring components to evaluate the image compression such as: original
+            and compressed file sizes, compression time, compresstion ratio, mean squared error
+        </li>
+        <li>
+            Information: Screen presents information about the application.
+        </li>
+    </ul>
+    </p>
+
+    <h1>How it works</h1>
+    <ol>
+        <li>
+            We load a color image. Then we apply the two-dimensional Fourier transform for each color channel
+            of the image.
+        </li>
+        <li>
+            Values are sorted and only a fraction of frequncies determined by threshold are kept, the rest of the
+            data is set to 0.
+        </li>
+        <li>
+            The result is then applied to inverse fft algorithm and shown to the screen.
+            Resulted image can be downloaded in our own format.
+        </li>
+    </ol>
+
+    <h1>What is FFT</h1>
+    <h3>FFT</h3>
+    <p>
+        A fast Fourier transform (FFT) is an algorithm that computes the Discrete Fourier Transform (DFT) of a sequence,
+        or its inverse. A Fourier transform converts a signal from its original domain to a representation in the
+        frequency domain and vice versa. Fourier Transform decomposes an image into its frequency components.
+    </p>
+
+    <h3>2d FFT</h3>
+    <p>
+        The two-dimensional Fourier transform of a matrix of data is achieved by first applying the one-dimensional
+        Fourier transform to every row of the matrix and then applying the one-dimensional Fourier transform to every
+        column of the intermediate matrix. The two-dimensional FFT is effective for image compression, because many of
+        the Fourier coefficients can be discarded without losing significant image quality.
+    </p>
+</div>
+
+</html>
